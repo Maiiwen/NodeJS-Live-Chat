@@ -11,25 +11,56 @@ const author = new Author(uuid, username);
 const messageForm = document.querySelector("#messageForm");
 
 const messageFeed = document.querySelector("#messageFeed");
-const messageService = new MessageService();
+const messageService = new MessageService(messageFeed);
 
-messageService.getAll(messageFeed);
+messageService.getAll();
 
 messageForm.addEventListener("submit", (event) => {
     event.preventDefault();
-    if (messageForm.messageId.value !== "") {
 
+    let message = messageForm.message.value;
+    if (message === "") {
+        return;
     }
-    let message = messageForm.querySelector("#message").value;
     let messageObject = {
         message: message,
         date: new Date(),
-        author: author
+        author: {
+            id: author.id,
+            username: author.username
+        }
     }
-    messageService.postMessage(messageObject);
-    messageForm.querySelector("#message").value = "";
-    messageFeed.innerHTML = "";
-    messageService.getAll(messageFeed);
+    if (messageForm.messageId.value !== "") {
+        console.log(messageForm.messageId.value)
+        messageObject.id = messageForm.messageId.value;
+        messageForm.messageId.value = "";
+        messageService.updateMessage(messageObject);
+    } else {
+        messageService.postMessage(messageObject);
+    }
+
+    messageForm.message.value = "";
 })
 
 
+// // connect to websocket using uuid
+// const socket = new WebSocket("ws://localhost:3001/");
+//
+// socket.onmessage = (event) => {
+//     const message = JSON.parse(event.data);
+//     switch (message.type) {
+//         case "new":
+//             messageService.addMessage(message.data);
+//             break;
+//         case "update":
+//             messageService.updateMessage(message.data);
+//             break;
+//         case "delete":
+//             messageService.deleteMessage(message.data);
+//             break;
+//         default:
+//             console.log("Unknown message type: " + message.type);
+//             console.log(message);
+//             break;
+//     }
+// }

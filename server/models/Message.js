@@ -14,7 +14,7 @@ const MessageSchema = new mongoose.Schema({
         username: {
             type: String,
         }
-    }
+    },
 });
 
 const Message = mongoose.model('Message', MessageSchema);

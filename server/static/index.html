@@ -24,38 +24,16 @@
                     <h1 class="text-center">Chat</h1>
                 </div>
                 <div class="card-body">
-                    <div style="max-height: 50vh" class="overflow-scroll" id="messageFeed">
-<!--                        <div class="d-flex flex-row align-items-center">-->
-<!--                            <div class="d-flex flex-column align-items-start">-->
-<!--                                <div class="d-flex flex-row align-items-center">-->
-<!--                                    <span class="badge bg-primary">User</span>-->
-<!--                                </div>-->
-<!--                                &lt;!&ndash;                                    display the user message&ndash;&gt;-->
-<!--                                <div class="d-flex flex-row align-items-center">-->
-<!--                                    <span class="border py-2 px-3">Message</span>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                        <div class="d-flex flex-row-reverse align-items-center">-->
-<!--                            <div class="d-flex flex-column align-items-end">-->
-<!--                                <div class="d-flex flex-row align-items-center">-->
-<!--                                    <span class="badge bg-primary">User</span>-->
-<!--                                </div>-->
-<!--                                &lt;!&ndash;                                    display the user message&ndash;&gt;-->
-<!--                                <div class="d-flex flex-row align-items-center text-end mt-1">-->
-<!--                                    <span class="border py-2 px-3">Message</span>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </div>-->
+                    <div style="max-height: 50vh; overflow-x: scroll; overflow-wrap: anywhere" id="messageFeed">
                     </div>
                     <hr>
                     <!--                    make a chat input -->
                     <form id="messageForm">
                         <div class="input-group mt-3">
                             <input type="text" name="message" class="form-control" placeholder="Type your message here...">
+                        <input type="hidden" name="messageId" value="">
                             <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Send</button>
                         </div>
-                        <input type="hidden" name="messageId" value="">
                     </form>
                 </div>
             </div>
