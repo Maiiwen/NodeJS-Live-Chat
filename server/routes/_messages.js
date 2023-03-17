@@ -20,7 +20,6 @@ let messages = (app) => {
             }))
         } catch (err) {
             console.error(err)
-
         }
 
     })
@@ -30,7 +29,10 @@ let messages = (app) => {
 
     app.post('/api/messages', (req, res) => {
         // create new message using mongoose
-        let message = new Message(req.body)
+        let message = new Message()
+        message.message = req.body._message
+        message.date = req.body._date
+        message.author = req.body._author
         message.save()
 
         res.setHeader('Content-Type', 'application/json');
@@ -42,8 +44,8 @@ let messages = (app) => {
 
     app.put('/api/messages/:id', async (req, res) => {
         let message = await Message.findById(req.params.id)
-        console.log(message)
-        message.message = req.body.message
+
+        message.message = req.body._message
         message.save()
 
         res.setHeader('Content-Type', 'application/json');

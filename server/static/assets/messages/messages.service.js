@@ -5,9 +5,12 @@ export class MessageService {
 
     _messageFeedElement
 
-    constructor(element) {
+    _socket
+
+    constructor(element, socket) {
         this.messages = [];
         this.messageFeedElement = element;
+        this.socket = socket;
     }
 
     get messageFeedElement() {
@@ -16,6 +19,14 @@ export class MessageService {
 
     set messageFeedElement(element) {
         this._messageFeedElement = element;
+    }
+
+    get socket() {
+        return this._socket;
+    }
+
+    set socket(socket) {
+        this._socket = socket;
     }
 
     addMessage(messageObject) {
@@ -96,7 +107,13 @@ export class MessageService {
         fetch(url, options)
             .then(response => response.json())
             .then(data => {
-               this.addMessage(data.messageAdded)
+                let message = new Message(data.messageAdded.message, data.messageAdded.date, data.messageAdded.author, data.messageAdded._id)
+                // send change to websocket
+                this.socket.send(JSON.stringify({
+                    type: "add",
+                    message: message
+                }));
+                this.addMessage(message)
             })
             .catch(error => console.log(error));
     }
@@ -115,6 +132,11 @@ export class MessageService {
                 // search and delete the message from DOM
                 let messageElement = document.querySelector(`[data-id="${data.deletedMessage}"]`);
                 messageElement.remove();
+                // send change to websocket
+                this.socket.send(JSON.stringify({
+                    type: "delete",
+                    messageId: data.deletedMessage
+                }));
 
             })
             .catch(error => console.log(error));
@@ -137,8 +159,24 @@ export class MessageService {
                 messageElement.remove();
                 let updatedMessage = new Message(data.messageUpdated.message, data.messageUpdated.date, data.messageUpdated.author, data.messageUpdated._id);
                 this.addMessage(updatedMessage);
+                // send change to websocket
+                this.socket.send(JSON.stringify({
+                    type: "update",
+                    message: updatedMessage
+                }));
 
             })
             .catch(error => console.log(error));
+    }
+
+    updateLocalMessage = (message) => {
+        let messageElement = document.querySelector(`[data-id="${message.id}"]`);
+        messageElement.remove();
+        this.addMessage(message);
+    }
+
+    deleteLocalMessage = (id) => {
+        let messageElement = document.querySelector(`[data-id="${id}"]`);
+        messageElement.remove();
     }
 }

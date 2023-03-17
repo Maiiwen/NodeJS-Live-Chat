@@ -31,5 +31,6 @@ services:
       volumes:
         - ./server:/home/node/app
       ports:
+        - "3000:3000"
         - "3001:3000"
       command: "npm run dev"
